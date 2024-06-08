@@ -2,37 +2,39 @@ import React, { useState } from 'react'
 import NumberButtonNew from './NumberButtonNew'
 
 const NumberList = () => {
-  const [clickedButtons, setClickedButtons] = useState([])
+  const [listClickedButtons, setListClickedButtons] = useState([])
 
-  // ABORDAGEM COM TRÊS FUNÇÕES
-  const addValue = (value) => (prevArray) => [...prevArray, value]
-  const removeValue = (value) => (prevArray) => prevArray.filter((currVal) => currVal !== value)
+  const CLICKS_LIMIT = 6
+  const isButtonEnabled = listClickedButtons.length < CLICKS_LIMIT
 
-  const updateListClickedButtons = (buttonClickedState, value) => {
-    if (buttonClickedState) setClickedButtons(addValue(value))
-    else setClickedButtons(removeValue(value))
+  const dozens = Array.from({ length: 10 }, (_, i) => (i + 1).toString().padStart(2, '0'))
+
+  const addValue = (value) => (prevList) => [...prevList, value]
+  const removeValue = (value) => (prevList) => prevList.filter((currVal) => currVal !== value)
+
+  const updateListClickedButtons = (buttonState, value) => {
+    const updateList = buttonState ? addValue(value) : removeValue(value)
+    setListClickedButtons(updateList)
   }
-
-  console.log(clickedButtons)
 
   return (
     <div>
-      <NumberButtonNew num={'01'} checkClickButton={updateListClickedButtons} />
-      <NumberButtonNew num={'02'} checkClickButton={updateListClickedButtons} />
-      <NumberButtonNew num={'03'} checkClickButton={updateListClickedButtons} />
-      <NumberButtonNew num={'04'} checkClickButton={updateListClickedButtons} />
-      <NumberButtonNew num={'05'} checkClickButton={updateListClickedButtons} />
-      <NumberButtonNew num={'06'} checkClickButton={updateListClickedButtons} />
-      <NumberButtonNew num={'07'} checkClickButton={updateListClickedButtons} />
-      <NumberButtonNew num={'08'} checkClickButton={updateListClickedButtons} />
-      <NumberButtonNew num={'09'} checkClickButton={updateListClickedButtons} />
-      <NumberButtonNew num={'10'} checkClickButton={updateListClickedButtons} />
+      <p>
+        {dozens.map((dozen) => (
+          <NumberButtonNew
+            key={dozen}
+            num={dozen}
+            updateListFromButton={updateListClickedButtons}
+            isButtonEnabled={isButtonEnabled}
+          />
+        ))}
+      </p>
 
       <p>
         <b>Botões Clicados:</b>
       </p>
       <ul>
-        {clickedButtons.map((buttonValue) => (
+        {listClickedButtons.map((buttonValue) => (
           <li key={buttonValue}>{buttonValue}</li>
         ))}
       </ul>

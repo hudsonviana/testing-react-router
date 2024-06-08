@@ -1,17 +1,19 @@
 import { useState } from 'react'
 import styles from './styles.module.css'
 
-const NumberButtonNew = ({ num, checkClickButton }) => {
-  const [buttonClickedState, setButtonClickedState] = useState(false)
+const NumberButtonNew = ({ num, updateListFromButton, isButtonEnabled }) => {
+  const [isButtonClicked, setIsButtonClicked] = useState(false)
 
   const buttonClickHandler = () => {
-    setButtonClickedState((prevState) => !prevState)
-    checkClickButton(!buttonClickedState, num)
+    if (isButtonClicked || isButtonEnabled) {
+      setIsButtonClicked((prevState) => !prevState)
+      updateListFromButton(!isButtonClicked, num)
+    }
   }
 
   return (
     <button
-      className={`${styles.btn} ${buttonClickedState ? styles.btnClicked : ''}`}
+      className={`${styles.btn} ${isButtonClicked ? styles.btnClicked : ''}`}
       onClick={buttonClickHandler}
       value={num}
     >
