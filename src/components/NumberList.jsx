@@ -1,21 +1,13 @@
 import React, { useState } from 'react'
 import NumberButtonNew from './NumberButtonNew'
 
+const dozens = Array.from({ length: 10 }, (_, i) => (i + 1).toString().padStart(2, '0'))
+
 const NumberList = () => {
   const [listClickedButtons, setListClickedButtons] = useState([])
 
   const CLICKS_LIMIT = 6
   const isButtonEnabled = listClickedButtons.length < CLICKS_LIMIT
-
-  const dozens = Array.from({ length: 10 }, (_, i) => (i + 1).toString().padStart(2, '0'))
-
-  const addValue = (value) => (prevList) => [...prevList, value]
-  const removeValue = (value) => (prevList) => prevList.filter((currVal) => currVal !== value)
-
-  const updateListClickedButtons = (buttonState, value) => {
-    const updateList = buttonState ? addValue(value) : removeValue(value)
-    setListClickedButtons(updateList)
-  }
 
   return (
     <div>
@@ -24,7 +16,7 @@ const NumberList = () => {
           <NumberButtonNew
             key={dozen}
             num={dozen}
-            updateListFromButton={updateListClickedButtons}
+            updateListFromButton={setListClickedButtons}
             isButtonEnabled={isButtonEnabled}
           />
         ))}
